@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Quiz Template</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .quiz-container {
+            max-width: 970px; /* Increased container width */
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 50px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-heading {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .question {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            margin-bottom: 20px;
+        }
+
+        .option {
+            display: inline-block;
+            margin-right: 40px; /* Increased space between options */
+            cursor: pointer;
+        }
+
+        .selected {
+            font-weight: bold;
+            color: #007bff; /* Primary color */
+        }
+
+        .submit-btn {
+            display: block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div class="quiz-heading">
+        Welcome to the Quiz!
+        <hr>
+    </div>
+
+    <form id="quiz-form" method="post" action="{% url 'quiz_result' %}">
+        {% csrf_token %}
+        {% for question in questions %}
+        <div class="question">
+            {{ forloop.counter }}. {{ question.question }}
+        </div>
+        <div class="options">
+            <label class="option" data-question="{{ forloop.counter }}" onclick="markSelected(this)">
+                <input type="radio" name="q{{ question.id }}" value="a"> a) {{ question.option_a }}
+            </label>
+            <label class="option" data-question="{{ forloop.counter }}" onclick="markSelected(this)">
+                <input type="radio" name="q{{ question.id }}" value="b"> b) {{ question.option_b }}
+            </label>
+            <label class="option" data-question="{{ forloop.counter }}" onclick="markSelected(this)">
+                <input type="radio" name="q{{ question.id }}" value="c"> c) {{ question.option_c }}
+            </label>
+            <label class="option" data-question="{{ forloop.counter }}" onclick="markSelected(this)">
+                <input type="radio" name="q{{ question.id }}" value="d"> d) {{ question.option_d }}
+            </label>
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+    </form>
+</div>
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function markSelected(label) {
+        // Get the question number from the data attribute
+        var questionNumber = label.getAttribute('data-question');
+
+        // Remove 'selected' class from options within the same question
+        var options = document.querySelectorAll('.option[data-question="' + questionNumber + '"]');
+        options.forEach(function (option) {
+            option.classList.remove('selected');
+        });
+
+        // Add 'selected' class to the clicked option
+        label.classList.add('selected');
+    }
+
+    // You can add more JavaScript code if needed
+</script>
+
+</body>
+</html>
